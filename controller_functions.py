@@ -52,10 +52,6 @@ def dashboard():
     current_time = datetime.utcnow().strftime('%A, %B %d, %Y')
     print("Time Right Now: ", current_time)
 
-    #Testing out datetime.datetime
-    # currentDT= datetime.datetime.now() <--this didn't work :(
-    # print("This is the currentDT: ", currentDT)
-
     # User/Dog Info
     your_dogs = db.session.query(Dog).filter(Dog.owner_id == login_id).all()
     user_info = db.session.query(User).filter(User.id == login_id).all()
@@ -66,8 +62,8 @@ def dashboard():
     # Other User Walks to Join
     other_walks = db.session.query(Walk, User).filter(Walk.planned_by_user_id == User.id).filter(User.id != login_id).all()
     # Past Walks Made by the User and Past Walks the User Has Joined      I added an =s to both past_walks and past_joined
-    past_walks = db.session.query(Walk, User).filter(Walk.planned_by_user_id == User.id).filter(User.id == login_id).filter(Walk.date >= current_time).all()
-    past_joined_walks = db.session.query(User, Walk).join(Walk, User.user_joined_walk).filter(User.id == login_id).filter(Walk.date >= current_time).all()
+    past_walks = db.session.query(Walk, User).filter(Walk.planned_by_user_id == User.id).filter(User.id == login_id).filter(Walk.date > current_time).all()
+    past_joined_walks = db.session.query(User, Walk).join(Walk, User.user_joined_walk).filter(User.id == login_id).filter(Walk.date > current_time).all()
 
     return render_template("dashboard.html", login_name = login_name, login_id = login_id, your_dogs = your_dogs, your_walks = your_walks, your_joined_walks = your_joined_walks, other_walks = other_walks, user_info = user_info, past_walks = past_walks, past_joined_walks = past_joined_walks, all_users = all_users)
 
